@@ -23,7 +23,7 @@ public class SnmpManagerMain {
         String address = SNMP_AGENT_ADDRESS + "/" + SNMP_AGENT_PORT;
         Address address1 = new UdpAddress(address);
         TransportMapping transportMapping = new DefaultUdpTransportMapping();
-        transportMapping.listen();
+
 
         CommunityTarget target = new CommunityTarget();
         target.setCommunity(new OctetString(SNMP_READ_COMMUNITY));
@@ -33,13 +33,17 @@ public class SnmpManagerMain {
         target.setTimeout(5000);
 
         PDU pdu = new PDU();
-        ResponseEvent responseEvent;
-        Snmp snmp ;
         pdu.add(new VariableBinding(new OID(SAMPLE_DEVICE_OID)));
         pdu.setType(SNMP_PDU_TYPE);
+
+        ResponseEvent responseEvent;
+        Snmp snmp ;
         snmp = new Snmp(transportMapping);
+        snmp.listen();
         System.out.println("Sending SNMP GET request to "+ SNMP_AGENT_ADDRESS+"/"+SNMP_AGENT_PORT+".\n" + pdu);
-        responseEvent = snmp.get(pdu,target);
+//        responseEvent = snmp.get(pdu,target);
+        responseEvent = snmp.send(pdu,target);
+
         if (responseEvent != null) {
 //            System.out.println("Response is not null.");
             if(responseEvent.getResponse().getErrorStatusText().equalsIgnoreCase("success")){
