@@ -1,4 +1,4 @@
-package navid.fana;
+package navid.fana.sample;
 
 import org.snmp4j.*;
 import org.snmp4j.event.ResponseEvent;
@@ -7,7 +7,6 @@ import org.snmp4j.mp.SnmpConstants;
 import org.snmp4j.security.*;
 import org.snmp4j.smi.*;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
-
 import java.io.IOException;
 
 public class SnmpManagerV3 {
@@ -18,8 +17,10 @@ public class SnmpManagerV3 {
 //    OID of MIB RFC 1213; Scalar Object = .iso.org.dod.internet.mgmt.mib-2.system.sysDescr.0
 //    .1.3.6.1.2.1.1.1.0
     public static final String SAMPLE_DEVICE_OID = ".1.3.6.1.2.1.1.1.0";
+//    public static final String SAMPLE_DEVICE_OID = "1.3.6.1.2.1.1.2";
     public static final String SNMP_AGENT_ADDRESS = "127.0.0.1";
     public static final String SNMP_AGENT_PORT = "161";
+//    public static final String SNMP_AGENT_PORT = "2001";
     public static final int SNMP_PDU_TYPE = PDU.GET;
 
     public static final int SNMP_V3_SECURITY_LEVEL = SecurityLevel.AUTH_PRIV;
@@ -36,12 +37,12 @@ public class SnmpManagerV3 {
         TransportMapping transportMapping = new DefaultUdpTransportMapping();
 
 //      UserTarget class used for SNMP v3
-//        UserTarget target = new UserTarget<>();
         UserTarget target = new UserTarget();
         target.setAddress(address1);
         target.setVersion(SNMP_VERSION);
         target.setRetries(2);
         target.setTimeout(1000);
+
 //      Security configs for SNMP v3 target
         target.setSecurityLevel(SNMP_V3_SECURITY_LEVEL);
         target.setSecurityName(new OctetString(SNMP_V3_USERNAME));
@@ -68,7 +69,7 @@ public class SnmpManagerV3 {
         Snmp snmp ;
         ResponseEvent responseEvent;
         snmp = new Snmp(transportMapping);
-        snmp.getUSM().addUser(SNMP_V3_SECURITY_NAME, usmUser);
+        snmp.getUSM().addUser(new OctetString(SNMP_V3_USERNAME), usmUser);
         snmp.listen();
         System.out.println("Sending SNMP GET request to "+ SNMP_AGENT_ADDRESS+"/"+SNMP_AGENT_PORT+".\n" + pdu);
         responseEvent = snmp.send(pdu,target);
@@ -95,5 +96,4 @@ public class SnmpManagerV3 {
         }
         snmp.close();
     }
-
 }

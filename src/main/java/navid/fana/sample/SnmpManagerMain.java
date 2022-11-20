@@ -1,4 +1,4 @@
-package navid.fana;
+package navid.fana.sample;
 
 import org.snmp4j.*;
 import org.snmp4j.event.ResponseEvent;
@@ -16,7 +16,7 @@ public class SnmpManagerMain {
 //    .1.3.6.1.2.1.1.1.0
     public static final String SAMPLE_DEVICE_OID = ".1.3.6.1.2.1.1.1.0";
     public static final String SNMP_AGENT_ADDRESS = "127.0.0.1";
-    public static final String SNMP_AGENT_PORT = "161";
+    public static final String SNMP_AGENT_PORT = "2001";
     public static final int SNMP_PDU_TYPE = PDU.GET;
 
     public static void main(String[] args) throws IOException {
