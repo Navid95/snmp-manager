@@ -70,14 +70,18 @@ public class Run {
                 try {
                     ResponseEvent responseEvent = simpleNms.snmpGet(oidList);
                     if (responseEvent != null) {
-                        if (responseEvent.getResponse().getErrorStatusText().equalsIgnoreCase("success")) {
-                            PDU responsePDU = responseEvent.getResponse();
-                            System.out.println("\nsnmp GET response:\n" + responsePDU.getVariableBindings().get(0));
+                        if (responseEvent.getResponse() != null) {
+                            if (responseEvent.getResponse().getErrorStatusText().equalsIgnoreCase("success")) {
+                                PDU responsePDU = responseEvent.getResponse();
+                                System.out.println("\nsnmp GET response:\n" + responsePDU.getVariableBindings().get(0));
+                            } else {
+                                System.out.println("snmp GET request is null.\n Printing the response:\n\t" + responseEvent.getResponse());
+                            }
                         } else {
-                            System.out.println("snmp GET request is null.\n Printing the response:\n\t" + responseEvent.getResponse());
+                            System.out.println("snmp GET request time out.");
                         }
                     } else {
-                        System.out.println("snmp GET request time oue.");
+                        System.out.println("snmp GET request time out.");
                     }
                 } catch (IOException e) {
                     System.out.println("Problem in sending the snmp get request");
